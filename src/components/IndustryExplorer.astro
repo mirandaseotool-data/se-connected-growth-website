@@ -1,0 +1,12 @@
+---
+const industries=[
+ {name:'Ecommerce', headline:'From first visit to next order.',description:'Connect discovery, product pages and email follow-up around purchases and repeat business.',steps:[['Get discovered','Relevant search and paid campaigns.'],['Make choosing easy','Clear product pages and a useful shopping journey.'],['Give a reason to return','Relevant email follow-up and repeat-customer campaigns.']],href:'/contact/?interest=websites',cta:'Discuss your online store'},
+ {name:'Restaurants',headline:'From “where to eat?” to “table booked.”',description:'Help customers find your venue, understand the offer and reach the booking or ordering page.',steps:[['Be found nearby','Local search and a clear venue presence.'],['Build an appetite','Menus, useful details and social content.'],['Make the booking easy','A direct route to reservations or ordering.']],href:'/contact/?interest=seo-ai-search',cta:'Discuss your restaurant'},
+ {name:'Local services',headline:'From a local search to a real enquiry.',description:'Make your services and coverage clear, build trust and make it easy to enquire.',steps:[['Meet the need','Relevant local search and service information.'],['Earn the confidence','Explain the work, coverage and evidence.'],['Start a conversation','Clear contact options and useful follow-up.']],href:'/contact/?interest=managed',cta:'Discuss your service business'}
+];
+---
+<section class="section wrap industry-explorer" data-tabs>
+ <div class="section-heading"><h2>Different businesses.<br /><em>Real next steps.</em></h2><p>Choose your world.<br />See how the work connects.</p></div>
+ <div class="industry-controls" data-tab-controls aria-label="Choose your business type" hidden>{industries.map((item,i)=><button type="button" id={`industry-tab-${i}`} data-tab={i} aria-controls={`industry-panel-${i}`}>{item.name}<span aria-hidden="true">↗</span></button>)}</div>
+ {industries.map((item,i)=><section class="industry-panel" id={`industry-panel-${i}`} data-panel={i} aria-labelledby={`industry-title-${i}`}><div class="industry-overview"><h3 id={`industry-title-${i}`}>{item.headline}</h3><p>{item.description}</p><a class="text-link" href={`${item.href}&industry=${encodeURIComponent(item.name)}`}>{item.cta} ↗</a></div><ol class="journey">{item.steps.map(([title,text],j)=><li><span class="journey-number">0{j+1}</span><div><h4>{title}</h4><p>{text}</p></div></li>)}</ol></section>)}
+</section>

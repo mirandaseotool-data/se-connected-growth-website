@@ -1,0 +1,46 @@
+---
+import { site } from '../data/site';
+import '../styles/global.css';
+import '../styles/brand.css';
+import BrandLogo from '../components/BrandLogo.astro';
+interface Props { title: string; description: string; service?: string; noindex?: boolean }
+const { title, description, service, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname === '/404/' ? '/404.html' : Astro.url.pathname, Astro.site).href;
+const origin = new URL('/', Astro.site).href;
+const id = (name: string) => `${origin}#${name}`;
+const graph = [
+  { '@type': 'Organization', '@id': id('organization'), name: site.name, url: origin, description: site.description, email: site.email, areaServed: { '@type': 'Country', name: 'Australia' }, location: { '@type': 'Place', name: 'Sydney, Australia' } },
+  { '@type': 'WebSite', '@id': id('website'), url: origin, name: site.name, publisher: { '@id': id('organization') }, inLanguage: 'en-AU' },
+  { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { '@id': id('website') }, about: { '@id': service ? `${canonical}#service` : id('organization') }, inLanguage: 'en-AU' },
+  ...(service ? [{ '@type': 'Service', '@id': `${canonical}#service`, name: service, description, url: canonical, provider: { '@id': id('organization') }, areaServed: { '@type': 'Country', name: 'Australia' } }] : [])
+];
+const navigation = [['/services/', 'Services'], ['/lab/', 'Our approach'], ['/insights/', 'Insights'], ['/about/', 'About']];
+---
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | SE LABS</title><meta name="description" content={description} />
+    <meta name="robots" content={!site.release || noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" /><meta property="og:locale" content="en_AU" />
+    <meta property="og:title" content={`${title} | SE LABS`} /><meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} /><meta property="og:site_name" content="SE LABS" />
+    <meta name="twitter:card" content="summary" /><meta name="theme-color" content="#f7f4ee" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\u003c')} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="masthead">
+      <a class="wordmark" href="/" aria-label="SE LABS home"><BrandLogo /></a>
+      <nav aria-label="Main navigation">{navigation.map(([href, label]) => <a href={href} aria-current={Astro.url.pathname.startsWith(href) ? 'page' : undefined}>{label}</a>)}</nav>
+      <a class="button small" href="/audit/">Free AI audit <span aria-hidden="true">↗</span></a>
+    </header>
+    <main id="main"><slot /></main>
+    <footer>
+      <div class="footer-top"><a class="wordmark" href="/"><BrandLogo /></a><p>Independent thinking.<br />Connected marketing.</p><a class="footer-email" href={`mailto:${site.email}`}>{site.email} ↗</a></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} SE LABS · Sydney, Australia</span><a href="/services/">Services</a><a href="/lab/">Our approach</a><a href="/contact/">Contact</a></div>
+    </footer>
+  </body>
+</html>

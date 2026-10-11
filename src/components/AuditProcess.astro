@@ -1,0 +1,19 @@
+<section class="audit-journey wrap" aria-label="How your free AI audit works">
+ <ol class="audit-journey-track">
+  <li><span class="journey-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01M8 14h8"/></svg></span><div><h2>Your website.</h2><p>One URL. No signup.</p></div><span class="journey-connector" aria-hidden="true">→</span></li>
+  <li><span class="journey-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H4v4M16 3h4v4M20 17v4h-4M8 21H4v-4M3 12h18"/><path d="m9 8 2 2 4-4"/></svg></span><div><h2>A focused check.</h2><p>Content, structure and crawl access.</p></div><span class="journey-connector" aria-hidden="true">→</span></li>
+  <li><span class="journey-symbol journey-symbol-final" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H5v18h14V8zM14 3v5h5M8 12h8M8 16h5"/></svg></span><div><h2>Your next move.</h2><p>Clear findings. A report to keep.</p></div></li>
+ </ol>
+</section>
+<style>
+.audit-journey{padding-top:0;padding-bottom:48px}
+.audit-journey-track{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;margin:0;padding:30px 32px;background:#eeece6;border:1px solid #e2dfd6;border-radius:14px}
+.audit-journey-track li{display:flex;align-items:center;gap:18px;min-width:0;position:relative}
+.journey-symbol{display:grid;place-items:center;width:46px;height:46px;flex:0 0 46px;border:1px solid #cccac1;border-radius:12px;color:var(--ink);background:var(--paper)}
+.journey-symbol svg{width:25px;height:25px}.journey-symbol-final{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.audit-journey-track h2{font-size:20px;font-weight:500;letter-spacing:-.035em;margin:0 0 7px;text-wrap:initial;line-height:1.15}
+.audit-journey-track p{font-size:13px;line-height:1.45;margin:0;color:#64655e}
+.journey-connector{font-size:24px;color:#9b9c92;margin-left:auto;padding-left:12px;padding-right:4px}
+@media(max-width:1000px){.audit-journey-track{gap:20px;padding:26px 24px}.audit-journey-track li{gap:12px}.journey-connector{display:none}.audit-journey-track h2{font-size:18px}}
+@media(max-width:760px){.audit-journey{padding-bottom:36px}.audit-journey-track{grid-template-columns:1fr;gap:0;padding:8px 22px;border-radius:12px}.audit-journey-track li{padding:22px 0;gap:18px}.audit-journey-track li+li{border-top:1px solid #dcd9d0}.audit-journey-track h2{font-size:20px}.audit-journey-track p{font-size:13px}}
+</style>

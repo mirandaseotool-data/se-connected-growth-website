@@ -1,0 +1,22 @@
+{
+  "name": "se-lab-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1",
+    "test": "node --test scripts/*.test.mjs",
+    "build:release": "RELEASE=true astro build",
+    "start": "node dist/server/entry.mjs",
+    "test:api": "node scripts/audit-api.integration.mjs"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.6",
+    "astro": "7.3.5",
+    "cheerio": "^1.2.0",
+    "ipaddr.js": "^2.5.0",
+    "motion": "^13.4.6"
+  }
+}

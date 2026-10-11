@@ -1,0 +1,16 @@
+---
+const areas = [
+ {name:'Access',title:'Give your content a clear path.',question:'Can search crawlers reach your public pages?',description:'We review page access and whether important business information is available as readable content.',example:'A service is described only inside an image.',action:'Add a clear text description to the page so the offer can be read and understood.'},
+ {name:'Clarity',title:'Make your business easy to understand.',question:'Is it clear what you do and who you help?',description:'We check page titles, headings and descriptions for missing or repeated information.',example:'A page says “we help you grow” without naming a service or customer.',action:'Explain the service, who it helps and the specific problem it addresses.'},
+ {name:'Useful answers',title:'Answer the questions customers ask.',question:'Does your website give people enough detail to choose?',description:'We check for readable page text, image descriptions and structured business information.',example:'A service page lists features but leaves the process unexplained.',action:'Explain what the work includes, what the customer receives and how to get started.'}
+];
+---
+<aside class="audit-preview" id="audit-preview" aria-labelledby="preview-heading" data-tabs>
+ <header class="audit-preview-heading"><h2 id="preview-heading">Know what to<br />improve first.</h2><p>Explore your automated checks.</p></header>
+ <div class="audit-preview-controls" data-tab-controls aria-label="Audit review areas" hidden>{areas.map((area,i)=><button type="button" id={`audit-tab-${i}`} data-tab={i} aria-controls={`audit-panel-${i}`}>{area.name}</button>)}</div>
+ <div class="audit-preview-panels">{areas.map((area,i)=><section id={`audit-panel-${i}`} data-panel={i} aria-labelledby={`audit-title-${i}`}>
+ <h3 id={`audit-title-${i}`}>{area.question}</h3><p>{area.description}</p>
+ <details class="audit-example"><summary>See an example recommendation <span aria-hidden="true">+</span></summary><div><p class="example-note">Illustrative example — not a result from your website.</p><h4>What we might find</h4><p>{area.example}</p><h4>A practical next step</h4><p>{area.action}</p></div></details>
+ </section>)}</div>
+ <footer class="audit-preview-footer"><span class="audit-deliverable-count" aria-hidden="true">↗</span><p><strong>Your findings. Ready to download.</strong><br />What to improve, why it matters and where to start.</p></footer>
+</aside>

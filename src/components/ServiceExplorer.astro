@@ -1,0 +1,17 @@
+---
+const items = [
+ {name:'Search + AI', title:'Be found.', text:'Connect search intent, clear service information and technical foundations so the right customers can discover your business.', href:'/services/seo-ai-search/', outcome:'Discovery'},
+ {name:'Website', title:'Make it count.', text:'Give visitors a clear offer, useful evidence and an easy next step—from the first visit to an enquiry, booking or purchase.', href:'/services/websites/', outcome:'Action'},
+ {name:'Advertising', title:'Reach the right people.', text:'Connect your campaign message and landing page, then measure the business actions that happen after the click.', href:'/services/paid-advertising/', outcome:'Attention'},
+ {name:'Social + email', title:'Keep the connection.', text:'Build relevant content and follow-up around customers, giving them a reason to remember you and return.', href:'/services/social-email/', outcome:'Return'},
+];
+---
+<div class="explorer" data-tabs>
+ <div class="explorer-stage">
+  <svg class="connection-lines" viewBox="0 0 400 320" preserveAspectRatio="none" aria-hidden="true"><path class="route-0" d="M80 50 V160 H200"/><path class="route-1" d="M320 50 V160 H200"/><path class="route-2" d="M80 270 V160 H200"/><path class="route-3" d="M320 270 V160 H200"/></svg>
+  <div class="explorer-core" aria-hidden="true"><span class="core-icon" aria-hidden="true">＋</span><span>YOUR<br />BUSINESS</span></div>
+  <div class="explorer-controls" data-tab-controls aria-label="Explore connected services" hidden>{items.map((item,i)=><button type="button" class={`explorer-node explorer-node-${i}`} id={`service-tab-${i}`} data-tab={i} aria-controls={`service-panel-${i}`}><span class="node-number">0{i+1}</span>{item.name}<span class="node-plus" aria-hidden="true">↗</span></button>)}</div>
+  <span class="explorer-hint" data-enhanced-only hidden>Choose a connection to explore</span>
+ </div>
+ <div class="explorer-panels">{items.map((item,i)=><section class="explorer-panel" id={`service-panel-${i}`} data-panel={i} aria-labelledby={`service-title-${i}`}><div class="panel-top"><span>0{i+1} / {item.outcome}</span><h2 id={`service-title-${i}`}>{item.title}</h2></div><p>{item.text}</p><a href={item.href}>Explore {item.name.toLowerCase()} <span aria-hidden="true">↗</span></a></section>)}</div>
+</div>

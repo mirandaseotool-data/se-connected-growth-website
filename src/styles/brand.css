@@ -1,0 +1,81 @@
+/* SE LABS: geometric typography, light mineral background, connected modules. */
+:root{--ink:#20211f;--paper:#f6f4ef;--accent:#eae8e1;--muted:#6a6c65;--line:#d6d7cf;--action:#252824;--action-hover:#444a40}
+body{font-family:Arial,Helvetica,sans-serif}
+body em,body .heading-serif{font-family:inherit;font-style:normal;font-weight:500;letter-spacing:-.045em}
+.brand-logo{position:relative;display:block;width:192px;height:30px;overflow:hidden;mix-blend-mode:multiply}
+.brand-logo img{position:absolute;width:600px;height:600px;max-width:none;left:-204px;top:-452px}
+.masthead{min-height:100px;border-bottom:1px solid var(--line)}
+.masthead .wordmark{display:block;letter-spacing:normal}
+.masthead .button{font-weight:500}
+.hero{grid-template-columns:1.2fr 1fr;gap:7%;padding-top:65px;padding-bottom:65px;align-items:center}
+.hero h1{font-size:clamp(49px,6vw,96px);font-weight:500;letter-spacing:-.065em;line-height:1.05;margin-bottom:42px;text-wrap:initial}
+.headline-stop{color:var(--muted)}
+.hero-bottom{display:block}.hero-bottom p{font-size:18px;line-height:1.65}.hero-bottom .button{margin-top:32px;min-width:215px}
+h2{font-weight:500;letter-spacing:-.045em}.service-row h3{font-weight:500}
+body .three-col h3,body .panel-top h2,body .industry-overview h3{font-family:Arial,Helvetica,sans-serif;font-style:normal;font-weight:500;letter-spacing:-.04em}
+body .three-col h3{font-size:29px}body .panel-top h2{font-size:26px}body .industry-overview h3{font-size:clamp(28px,3vw,42px)}
+body .button:not(.secondary){background:var(--action);border-color:var(--action)}
+body .button:not(.secondary):hover{background:var(--action-hover);border-color:var(--action-hover)}
+body .masthead .button:not(.secondary){background:transparent;color:var(--ink);border-color:var(--line)}
+body .masthead .button:not(.secondary):hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.hero .explorer-stage{height:330px;background-image:radial-gradient(#d5d7ce .7px,transparent .7px);background-size:18px 18px;border:1px solid var(--line)}
+.connection-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.connection-lines path{fill:none;stroke:#c8ccc0;stroke-width:1;vector-effect:non-scaling-stroke;transition:stroke .3s}
+.hero .explorer[data-active='0'] .route-0,.hero .explorer[data-active='1'] .route-1,.hero .explorer[data-active='2'] .route-2,.hero .explorer[data-active='3'] .route-3{stroke:var(--ink);stroke-width:2;stroke-dasharray:6 6;animation:signal-flow 1.4s linear 3}
+@keyframes signal-flow{to{stroke-dashoffset:-24}}
+.hero .explorer-core{top:50%;width:126px;height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:var(--paper);border:1px solid var(--ink);font-size:15px;font-weight:600;line-height:1.2;letter-spacing:.01em}
+.core-icon{font:22px/1 Arial,sans-serif;color:var(--muted)}
+.hero .explorer-node{font-size:12px;gap:12px;padding:12px;min-height:45px;font-weight:500;border:1px solid #c5c8bb}
+.hero .explorer-node-0{left:12px;top:25px}.hero .explorer-node-1{right:12px;top:25px}.hero .explorer-node-2{left:12px;bottom:35px}.hero .explorer-node-3{right:12px;bottom:35px}
+.hero .explorer-node[aria-selected=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.hero .explorer-hint{font-size:9px;left:12px;bottom:8px;background:var(--paper)}
+.hero .explorer-panel{border-top:0;margin-top:0;padding:24px 0 0}
+.hero .panel-top>span{color:var(--muted);font-size:10px}.hero .explorer-panel a{font-weight:500}
+body .intro{border-color:var(--line)}body .intro p:first-child{font-size:clamp(23px,2.1vw,31px);line-height:1.4}
+body .lab-note>p{font-weight:500;letter-spacing:-.05em}body .closing h2{font-weight:500;line-height:1}
+body .round-link{background:var(--paper);color:var(--ink)}body .round-link:hover{background:#d8ddd0;color:var(--ink)}
+body .lead,body .prose p,body .prose li{color:#60635b}.dark p{color:#c4c8bd}
+body .deliverables,body .brief-form{background:var(--accent)}
+@media(max-width:1050px) and (min-width:761px){.hero{gap:4%;grid-template-columns:1fr 1fr}.hero h1{font-size:5.6vw}.hero .explorer-node{font-size:10px;gap:5px;padding:10px}.hero .explorer-core{width:104px;font-size:13px}}
+@media(max-width:760px){.brand-logo{width:154px;height:26px}.brand-logo img{width:480px;height:480px;left:-163.2px;top:-361.6px}.masthead{min-height:0}.hero{grid-template-columns:1fr;gap:42px;padding-top:48px;padding-bottom:46px}.hero h1{font-size:clamp(41px,9.7vw,72px);margin-bottom:28px;letter-spacing:-.06em}.hero-bottom p{font-size:16px}.hero-bottom .button{margin-top:24px}.hero .explorer-node{font-size:10px;padding:10px;gap:5px}.hero .explorer-node-0,.hero .explorer-node-2{left:8px}.hero .explorer-node-1,.hero .explorer-node-3{right:8px}.hero .explorer-core{width:112px;height:96px;font-size:14px}.hero .explorer-stage{height:310px}.hero .explorer-panels{min-height:225px}.footer-top .brand-logo{width:154px}}
+@media(prefers-reduced-motion:reduce){.hero .connection-lines path{animation:none!important;stroke-dasharray:none!important}}
+@media(max-width:400px){.masthead{gap:14px}.masthead .brand-logo{width:128px;height:22px}.masthead .brand-logo img{width:400px;height:400px;left:-136px;top:-301.33px}.masthead .button.small{padding:11px 13px;gap:18px;font-size:12px}}
+/* Full supplied lockup. Crop the screenshot's canvas in CSS without altering the artwork. */
+body .brand-logo-complete{width:76px;height:136px;overflow:hidden;position:relative;mix-blend-mode:multiply}
+body .brand-logo-complete img{width:232px;height:232px;max-width:none;left:-78px;top:-50px;position:absolute}
+body .masthead{padding-top:20px;padding-bottom:20px}
+@media(max-width:760px){body .masthead .brand-logo-complete{width:62px;height:111px}body .masthead .brand-logo-complete img{width:189px;height:189px;left:-63.5px;top:-40.7px}}
+/* Free audit is the primary entry point. Remove editorial micro-labels. */
+.number,.node-number,.panel-top>span,.explorer-hint,.journey-number{display:none!important}
+.service-row{grid-template-columns:1.3fr 1fr 30px}
+.work-list article{grid-template-columns:1fr}
+.journey li:before{display:none}
+.hero h1{font-size:clamp(42px,5.2vw,80px);line-height:1.04;font-weight:500;margin-bottom:28px}
+.audit-start{margin-top:28px;display:grid;grid-template-columns:1fr;max-width:470px;gap:12px}
+.audit-start label{font-size:13px;font-weight:500}
+.audit-start input:not([type=hidden]){width:100%;min-width:0;padding:17px 15px;background:transparent;border:1px solid #a8aaa0;border-radius:0;color:var(--ink);font-size:16px}
+.hero-bottom .audit-start .button{margin:0;justify-content:space-between;width:100%;font-size:15px;min-height:57px}
+.hero-bottom .audit-note{font-size:12px;margin:14px 0 0;color:var(--muted)}
+.audit-delivery{border-top:2px solid var(--ink);padding:28px 0 0}
+.audit-delivery>h2{font-size:clamp(30px,3vw,43px);margin-bottom:20px}
+.audit-delivery>p{font-size:14px;color:var(--muted)}
+.audit-delivery ul{padding:0;list-style:none;margin:28px 0 0}
+.audit-delivery li{display:flex;gap:22px;border-top:1px solid var(--line);padding:24px 0;transition:padding-left .2s}
+.audit-delivery li:hover{padding-left:8px}
+.audit-delivery li>span{font-size:23px}
+.audit-delivery h3{font-size:19px;font-weight:500;letter-spacing:-.025em;margin:0 0 9px}
+.audit-delivery li p{font-size:14px;margin:0;color:var(--muted);max-width:340px}
+@media(max-width:760px){.hero h1{font-size:clamp(35px,8.8vw,65px)}.service-row{grid-template-columns:1fr 24px}.service-row p{grid-column:1}.service-row .row-arrow{grid-column:2}.audit-delivery>h2{font-size:32px}.audit-start{max-width:none}}
+
+.audit-process{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;padding-top:36px;padding-bottom:36px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.audit-process h2{font-size:22px;letter-spacing:-.03em;margin:0 0 12px}.audit-process p{font-size:14px;color:var(--muted);margin:0;max-width:32ch}
+.request-review{border:1px solid var(--line);padding:24px;margin-top:24px;scroll-margin-top:24px}.request-review h2{font-size:28px}.request-review p{font-size:14px}.request-review pre{font-family:inherit;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;border-block:1px solid var(--line);padding:20px 0;line-height:1.7}.request-review .form-actions{flex-wrap:wrap}.request-review:focus{outline:2px solid var(--ink);outline-offset:4px}#form-status:not(:empty){border-left:3px solid var(--ink);padding:12px 16px;font-size:14px;background:var(--accent)}
+@media(max-width:760px){.audit-process{grid-template-columns:1fr;gap:26px}.request-review{padding:18px}.closing{flex-wrap:wrap;gap:24px}}
+/* Keep filled CTAs readable in every state and use the brand focus colour. */
+body .button:not(.secondary):hover{color:var(--paper)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:5px}
+input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+body .masthead .brand-logo-complete{width:51px;height:92px}body .masthead .brand-logo-complete img{width:156px;height:156px;left:-52.5px;top:-33.6px}
+body .masthead{padding-top:16px;padding-bottom:16px}
+.brief-form fieldset{border:0;margin:0;padding:0;min-width:0}.brief-form legend{font-size:22px;letter-spacing:-.03em;margin-bottom:24px}.optional-context{padding:0 0 20px;margin:0 0 20px;border-color:var(--line)}.optional-context summary{font-size:14px;font-weight:500}.optional-context>div{padding-top:24px}.optional-context textarea{margin-bottom:0}
+@media(max-width:760px){body .masthead .brand-logo-complete{width:44px;height:79px}body .masthead .brand-logo-complete img{width:134px;height:134px;left:-45px;top:-29px}body .masthead{padding-top:12px;padding-bottom:12px}.contact-layout{padding-top:40px}.contact-layout h1{font-size:clamp(38px,9vw,58px)}}

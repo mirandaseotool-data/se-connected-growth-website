@@ -1,28 +1,31 @@
-# SE Connected Growth Website
+# SELABS website — source handoff
 
-A static one-page website for an independent Sydney growth studio, built with plain HTML, CSS, and JavaScript.
+This is the current Astro website with an automatic website-audit backend. It replaces the earlier static one-page implementation. Copying HTML alone is insufficient.
 
-## What's Included
+## Local development
+Use Node 24 LTS. Run `npm ci`, then `npm run dev`. Open the localhost URL printed by Astro.
 
-- `index.html` - page structure and content
-- `styles.css` - responsive layout, typography, and scroll-led animation styles
-- `script.js` - mobile menu behavior and scroll progress interaction
+## Build and verify
+Run `ASTRO_TELEMETRY_DISABLED=1 npm run build:release`, then `RELEASE=true npm test` and `npm run test:api`.
+Start the built application with `HOST=127.0.0.1 PORT=4321 npm start`.
 
-## Run Locally
+## Deployment
+A Node-capable host is required. Build output contains both client and server code. Do not publish only dist/client. Configure HTTPS, the canonical host and proxy/rate limits for the chosen platform. Hosting is not configured by this handoff.
 
-Open `index.html` in a browser.
+## Collaboration
+Target repository: https://github.com/mirandaseotool-data/se-connected-growth-website
+Create a feature branch and submit a pull request according to CONTRIBUTING.md. Inspect existing external deployment settings before merging into main. Keep the repository LICENSE and CONTRIBUTING.md. The legacy root index.html/styles.css/script.js are not the current app entrypoints; src/ contains the current app.
 
-No build step or package install is required.
+## Main files
+- src/pages/index.astro: homepage
+- src/pages/audit.astro: audit report UX
+- src/pages/api/audit.ts: server endpoint
+- src/lib/server/: safe public fetch and deterministic audit checks
+- src/styles/: design and layout
+- public/: logo and other assets
+- scripts/: tests
 
-## Collaborate
+## Current boundaries
+Automatic checks inspect initial HTML and public crawl files. They do not establish Google indexing, AI recommendations, visual usability or live performance. Contact uses an email draft rather than server-side delivery. Report state is not persisted. API limits are per process and need appropriate ingress/shared configuration when deployed at scale.
 
-To suggest changes:
-
-1. Fork this repository.
-2. Create a new branch for your change.
-3. Edit the files locally.
-4. Open a pull request with a short description of what changed.
-
-## License
-
-Released under the MIT License. See `LICENSE` for details.
+No .env secrets, node_modules, generated dist, unrelated client documents or Git metadata are included. Brand name for new materials is SELABS; supplied logo artwork is preserved.

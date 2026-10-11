@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/automated-audit.css';
+---
+<Base title="Run your free AI readiness audit" description="Automatically check your public website’s AI search foundations and receive evidence-based priorities, with clear limits on what the audit can verify." noindex>
+<section class="wrap auto-audit">
+ <div class="auto-intro"><h1>Your website.<br />A clearer next step.</h1><p>Get an automated check of your website’s AI search foundations. See what we found, what needs attention and what to do next.</p></div>
+ <form id="automatic-audit" class="auto-form"><label for="scan-url">Your website URL</label><div><input id="scan-url" name="website" type="text" inputmode="url" autocomplete="url" required maxlength="500" placeholder="yourwebsite.com" aria-describedby="audit-scope"/><button class="button" type="submit">Run free audit ↗</button></div><p id="audit-scope">Free. No email required. Checks the page you enter and public crawl files. This is a technical readiness check, not a live AI ranking test.</p></form>
+ <noscript><p>Enable JavaScript to run the automated audit, or <a href="/contact/">contact SE LABS</a> for help.</p></noscript>
+ <div class="scan-progress" id="scan-progress" hidden aria-hidden="true"><span></span></div><p id="scan-status" role="status" aria-live="polite"></p><p id="scan-error" role="alert" hidden></p>
+ <section id="scan-results" aria-labelledby="result-title" tabindex="-1" hidden>
+  <header class="result-header"><div><h2 id="result-title">Your audit results</h2><p id="result-url"></p><p id="result-date"></p></div><div class="report-actions"><button class="button secondary" id="download-audit" type="button">Save readable report ↓</button><button class="quiet-button" id="new-audit" type="button">Check another website ↗</button></div></header>
+  <p class="result-verdict" id="result-verdict"></p><div class="audit-totals" id="audit-totals"></div>
+  <section class="audit-priorities"><h3>Where to start</h3><div id="audit-priorities"></div></section>
+  <div class="checks-heading"><h3>Explore the checks</h3><button class="quiet-button" id="expand-checks" type="button">Expand visible checks</button></div>
+  <div class="check-filters" id="check-filters" role="group" aria-label="Filter audit checks"></div><p id="filter-status" role="status" aria-live="polite"></p><div id="audit-checks"></div>
+  <details class="audit-limits"><summary>Scope and limits of this report</summary><ul id="audit-limitations"></ul><button class="quiet-button" id="download-json" type="button">Download technical data (JSON) ↓</button></details>
+  <div class="audit-followup"><h3>Want help with the next steps?</h3><p>Discuss the findings with SE LABS and decide what is worth improving first.</p><a class="button" id="discuss-audit" href="/contact/?interest=seo-ai-search">Discuss my results ↗</a></div>
+ </section>
+</section>
+</Base>
+<script>
+import { normalizeWebsite } from '../lib/audit-url.mjs';
+import { reportText, reportSummary, statusLabels } from '../lib/audit-report.mjs';
+const form=document.querySelector<HTMLFormElement>('#automatic-audit')!;
+const input=document.querySelector<HTMLInputElement>('#scan-url')!;
+const button=form.querySelector<HTMLButtonElement>('button')!;
+const status=document.querySelector<HTMLElement>('#scan-status')!;
+const error=document.querySelector<HTMLElement>('#scan-error')!;
+const results=document.querySelector<HTMLElement>('#scan-results')!;
+const progress=document.querySelector<HTMLElement>('#scan-progress')!;
+const filters=document.querySelector<HTMLElement>('#check-filters')!;
+const checks=document.querySelector<HTMLElement>('#audit-checks')!;
+const expand=document.querySelector<HTMLButtonElement>('#expand-checks')!;
+let latest:any=null, busy=false;
+function element(tag:string,text:string,className=''){const node=document.createElement(tag);node.textContent=text;if(className)node.className=className;return node;}
+function filterChecks(value:string){
+ filters.querySelectorAll<HTMLButtonElement>('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter===value)));
+ let count=0;checks.querySelectorAll<HTMLDetailsElement>('details').forEach(item=>{item.hidden=value!=='all'&&item.dataset.status!==value;if(!item.hidden)count++;});
+ document.querySelector('#filter-status')!.textContent=count?`Showing ${count} of ${latest.checks.length} checks.`:'No checks in this category.';
+ expand.textContent='Expand visible checks';
+}
+function render(report:any){
+ document.querySelector('.auto-audit')!.classList.add('has-report');
+ document.querySelector('#result-url')!.textContent=report.url;
+ document.querySelector('#result-date')!.textContent=`Checked ${new Date(report.checkedAt).toLocaleString('en-AU')} · One-page snapshot`;
+ document.querySelector('#result-verdict')!.textContent=reportSummary(report);
+ const totals=document.querySelector('#audit-totals')!;totals.replaceChildren();
+ for(const [key,label] of [['warnings','Needs attention'],['unknown','Not verified'],['passed','Passed']]){const box=element('div','',key);box.append(element('strong',String(report.summary[key]??0)),element('span',label));totals.append(box);}
+ const priorities=document.querySelector('#audit-priorities')!;priorities.replaceChildren();
+ if(!report.priorities.length)priorities.append(element('p','No actionable warnings were identified. Explore any unverified checks and the report’s limits below.'));
+ report.priorities.forEach((check:any)=>{const item=element('article','');item.append(element('h4',check.title),element('p',check.recommendation));const link=element('button','View evidence ↓','quiet-button') as HTMLButtonElement;link.type='button';link.addEventListener('click',()=>{filterChecks('all');const target=document.getElementById(`finding-${check.id}`) as HTMLDetailsElement;target.open=true;target.querySelector('summary')!.focus();});item.append(link);priorities.append(item);});
+ checks.replaceChildren();
+ const order:Record<string,number>={warning:0,unknown:1,pass:2};
+ [...report.checks].sort((a,b)=>order[a.status]-order[b.status]).forEach((check:any)=>{const item=document.createElement('details');item.id=`finding-${check.id}`;item.dataset.status=check.status;const summary=element('summary','');summary.append(element('span',check.title),element('span',statusLabels[check.status as keyof typeof statusLabels]||'Not verified',`check-status ${check.status}`));item.append(summary,element('h4','What we found'),element('p',check.evidence,'check-evidence'));if(check.recommendation)item.append(element('h4','What to do next'),element('p',check.recommendation));checks.append(item);});
+ filters.replaceChildren();
+ for(const [value,label,count] of [['all','All',report.checks.length],['warning','Needs attention',report.summary.warnings],['unknown','Not verified',report.summary.unknown],['pass','Passed',report.summary.passed]]){const b=element('button',`${label} (${count})`) as HTMLButtonElement;b.type='button';b.dataset.filter=String(value);b.setAttribute('aria-controls','audit-checks');b.addEventListener('click',()=>filterChecks(String(value)));filters.append(b);}
+ filterChecks('all');
+ const limits=document.querySelector('#audit-limitations')!;limits.replaceChildren(...report.limitations.map((text:string)=>element('li',text)));
+ const goal=report.priorities.length?`I would like help with my automated audit findings: ${report.priorities.map((p:any)=>p.title).join('; ')}.`:'I would like to discuss the next steps after my automated website audit.';
+ document.querySelector<HTMLAnchorElement>('#discuss-audit')!.href=`/contact/?interest=seo-ai-search&website=${encodeURIComponent(report.url)}&goal=${encodeURIComponent(goal.slice(0,1000))}`;
+ results.hidden=false;results.focus();
+}
+async function run(){
+ if(busy)return;
+ input.setCustomValidity('');try{input.value=normalizeWebsite(input.value);}catch{input.setCustomValidity('Enter a public website such as example.com.');form.reportValidity();return;}
+ if(!form.reportValidity())return;
+ error.hidden=true;busy=true;button.disabled=true;input.readOnly=true;form.setAttribute('aria-busy','true');progress.hidden=false;
+ status.textContent=latest?'Checking the new address. Your previous report stays below until the new check completes.':'Checking your public page and crawl files. Usually a few seconds; allow up to 30 seconds.';
+ button.textContent='Checking website…';
+ const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),35000);
+ try{
+  const response=await fetch('/api/audit/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({website:input.value}),signal:controller.signal});
+  let report;try{report=await response.json();}catch{throw new Error('The audit service is temporarily unavailable. Please try again.');}
+  if(!response.ok)throw new Error(report.error||'The audit could not be completed. Please try again.');
+  latest=report;render(report);status.textContent='Your report is ready. Start with the findings below.';
+ }catch(err){error.textContent=err instanceof Error&&err.name==='AbortError'?'The website took too long to respond. Check the address and try again.':err instanceof Error?err.message:'The audit could not be completed. Please try again.';error.hidden=false;status.textContent=latest?'No new report generated. The previous report below is unchanged.':'No report generated. Check the address above and retry.';}
+ finally{clearTimeout(timeout);busy=false;button.disabled=false;input.readOnly=false;form.removeAttribute('aria-busy');progress.hidden=true;button.textContent='Run free audit ↗';}
+}
+input.addEventListener('input',()=>input.setCustomValidity(''));
+form.addEventListener('submit',event=>{event.preventDefault();run();});
+document.querySelector('#new-audit')!.addEventListener('click',()=>{input.focus();input.select();});
+expand.addEventListener('click',()=>{const visible=[...checks.querySelectorAll<HTMLDetailsElement>('details')].filter(x=>!x.hidden);const open=visible.some(x=>!x.open);visible.forEach(x=>x.open=open);expand.textContent=open?'Collapse visible checks':'Expand visible checks';});
+function download(technical=false){if(!latest)return;const blob=new Blob([technical?JSON.stringify(latest,null,2):reportText(latest)],{type:technical?'application/json':'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=`se-labs-${new URL(latest.url).hostname}-audit.${technical?'json':'txt'}`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Report prepared for download. Your results remain available below.';}
+document.querySelector('#download-audit')!.addEventListener('click',()=>download());
+document.querySelector('#download-json')!.addEventListener('click',()=>download(true));
+const supplied=new URLSearchParams(location.search).get('website');if(supplied){input.value=supplied;run();}
+</script>

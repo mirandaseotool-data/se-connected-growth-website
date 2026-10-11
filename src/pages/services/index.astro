@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import { services } from '../../data/site';
+---
+<Base title="Digital marketing services" description="Explore SE LABS’s website, SEO and AI search, paid advertising, social and email, and marketing automation services in Australia.">
+<section class="page-hero wrap"><h1>One service.<br /><em>Or the whole picture.</em></h1><p class="lead">Start with the problem you need to solve. We can work on one part of your marketing or connect the parts into an agreed plan.</p></section>
+<section class="wrap section service-cards">{services.map(s => <article><h2><a href={`/services/${s.slug}/`}>{s.name} ↗</a></h2><p>{s.intro}</p><a class="text-link" href={`/services/${s.slug}/`}>What’s included ↗</a></article>)}</section>
+<section class="callout wrap"><h2>Not sure what comes first?</h2><p>Share your website and the business problem. Start with a diagnosis before deciding which service you need.</p><a class="button" href="/contact/">Request a diagnosis ↗</a></section>
+</Base>
