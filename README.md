@@ -1,6 +1,14 @@
 # SELABS website — source handoff
 
-This is the current Astro website with an automatic website-audit backend. It replaces the earlier static one-page implementation. Copying HTML alone is insufficient.
+This is the current Astro website with an automatic website-audit backend. It is a proposed successor to the earlier static one-page implementation. Copying HTML alone is insufficient.
+
+## Which version am I opening?
+- `main` preserves the original static website.
+- `sara/automatic-audit` contains Sara's updated website and automatic audit backend for review.
+- The root `index.html`, `styles.css`, and `script.js` are the preserved original files. Opening that HTML directly shows the original version, not Sara's updated website.
+- The updated homepage is `src/pages/index.astro`. To view it, check out `sara/automatic-audit`, run the development commands below, and open the localhost URL. Automatic audit also needs the running server.
+
+This branch does not deploy the website or change `main`. Review the application and hosting requirements before merging.
 
 ## Local development
 Use Node 24 LTS. Run `npm ci`, then `npm run dev`. Open the localhost URL printed by Astro.
