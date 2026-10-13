@@ -1,0 +1,10 @@
+---
+const questions = [
+ ['What will I receive?', 'An automated report with checks, evidence and prioritised recommendations for the page you enter and its public crawl files.'],
+ ['Is the audit really free?', 'Yes. The initial review is free, with no obligation to purchase a service. Any deeper analysis or implementation is scoped and quoted separately.'],
+ ['Do you need access to my accounts?', 'No. The automated check uses public website content. You do not need to share account logins or passwords.'],
+ ['Will this tell me where I rank in AI answers?', 'The audit assesses your website’s readiness for AI search. It does not measure rankings or guarantee mentions in AI answers.'],
+ ['What happens after I run it?', 'Your report appears on screen and can be downloaded. If a page blocks access, we explain what could not be checked. Contact SE LABS if you want help with the findings.']
+];
+---
+<section class="section wrap audit-faq" id="audit-questions" aria-labelledby="faq-heading"><div><h2 id="faq-heading">Before you<br />get started.</h2><p>A few things you might want to know.</p><a class="text-link" href="/audit/">Run my free AI audit ↗</a></div><div>{questions.map(([q,a])=><details><summary>{q}<span aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div></section>

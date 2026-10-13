@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, services } from '../data/site';
+---
+<Base title="Discuss your website and next steps" description="Contact SE LABS to discuss your audit findings, website priorities or marketing support.">
+<section class="section wrap contact-layout"><div><h1 id="contact-heading">Let’s discuss<br /><em>your next steps.</em></h1><p class="lead" id="contact-intro">Share your website and the findings you want to discuss. We’ll help you explore the next steps and agree the scope before any paid work begins.</p><ul id="audit-inclusions"><li>Discuss the findings in your automated audit</li><li>Explore the improvements relevant to your business</li><li>Agree the scope of any further work</li></ul><p class="contact-note">Private account analysis and implementation are scoped separately. Paid work is quoted before it begins.</p><p><a class="text-link" href={`mailto:${site.email}`}>{site.email} ↗</a></p></div>
+<div><noscript><p class="no-js">Email <a href={`mailto:${site.email}`}>{site.email}</a> with your website, business goal and the support you need.</p></noscript><form class="brief-form" id="brief-form" data-email={site.email} aria-describedby="draft-help" hidden><fieldset id="request-fields"><legend>Your request</legend><label for="name">Your name</label><input id="name" name="name" autocomplete="name" required maxlength="120" /><label for="website">Your website</label><input id="website" name="website" type="text" inputmode="url" aria-describedby="website-help" autocomplete="url" placeholder="yourwebsite.com" maxlength="500" required /><p class="form-help" id="website-help">For example, yourwebsite.com or https://yourwebsite.com.</p><label for="interest">What would you like help with?</label><select id="interest" name="interest"><option value="diagnosis">Discuss my AI audit</option><option value="managed">Managed marketing services</option><option value="consulting">Consulting for my team</option>{services.map(s => <option value={s.slug}>{s.name}</option>)}</select><details class="optional-context"><summary>Add business context (optional)</summary><div><label for="industry">Your industry (optional)</label><select id="industry" name="industry"><option value="">Choose your industry</option><option>Ecommerce</option><option>Restaurants</option><option>Local services</option><option>Other</option></select><label for="goal">What would you like to improve? (optional)</label><textarea id="goal" name="goal" maxlength="2000" placeholder="For example: more qualified enquiries, a clearer website or less repetitive work."></textarea></div></details><p class="form-help" id="draft-help">This prepares a draft in your email app. You review and send it there. No details are uploaded by this form.</p><button class="button" type="submit">Review my request ↗</button></fieldset>
+<section class="request-review" id="request-review" aria-labelledby="review-title" tabindex="-1" hidden><h2 id="review-title">Ready to send?</h2><p>Check your details, then open your email app and send the request to <strong>{site.email}</strong>.</p><pre id="brief-preview"></pre><div class="form-actions"><button class="button" id="open-email" type="button">Open email draft ↗</button><button class="button secondary" id="edit-brief" type="button">Edit details</button><button class="button secondary" id="copy-brief" type="button">Copy request</button><button class="button secondary" id="download-brief" type="button">Download request ↓</button></div><p>After you send, we’ll review your request and reply by email. Include the findings you want help with. Any further work will be scoped and quoted before it begins.</p></section>
+<p id="form-status" role="status" aria-live="polite"></p><p class="form-help">No email app? Copy or download the request, then email it to <a href={`mailto:${site.email}`}>{site.email}</a>. Do not include passwords or private account data.</p></form></div></section>
+</Base>
+<script>
+import { normalizeWebsite } from '../lib/audit-url.mjs';
+const form = document.querySelector<HTMLFormElement>('#brief-form')!;
+form.hidden = false;
+const select = form.querySelector<HTMLSelectElement>('#interest')!;
+const industry = form.querySelector<HTMLSelectElement>('#industry')!;
+const website = form.querySelector<HTMLInputElement>('#website')!;
+const status = document.querySelector<HTMLElement>('#form-status')!;
+const fields = document.querySelector<HTMLFieldSetElement>('#request-fields')!;
+const review = document.querySelector<HTMLElement>('#request-review')!;
+const preview = document.querySelector<HTMLElement>('#brief-preview')!;
+const params = new URLSearchParams(location.search);
+for (const [field, key] of [[select, 'interest'], [industry, 'industry']] as const) {
+  const supplied = params.get(key);
+  if ([...field.options].some(o => o.value === supplied)) field.value = supplied!;
+}
+try { website.value = normalizeWebsite(params.get('website') || ''); } catch {}
+const suppliedGoal = params.get('goal');
+if (suppliedGoal && suppliedGoal.length <= 2000) { form.querySelector<HTMLTextAreaElement>('#goal')!.value = suppliedGoal; form.querySelector<HTMLDetailsElement>('.optional-context')!.open = true; }
+function syncIntent() {
+  const audit = select.value === 'diagnosis';
+  document.querySelector('#contact-heading')!.textContent = audit ? 'Let’s discuss your next steps.' : 'Let’s talk about your business.';
+  document.querySelector('#contact-intro')!.textContent = audit ? 'Share your website and the findings you want to discuss. We’ll help you explore the next steps and agree the scope before any paid work begins.' : 'Tell us what you need. We’ll discuss your priorities and agree the scope and fees before any paid work begins.';
+  document.querySelector<HTMLElement>('#audit-inclusions')!.hidden = !audit;
+}
+syncIntent();
+select.addEventListener('change', syncIntent);
+form.addEventListener('input', () => { website.setCustomValidity(''); review.hidden = true; status.textContent = ''; });
+function brief() {
+  website.setCustomValidity('');
+  try { website.value = normalizeWebsite(website.value); }
+  catch { website.setCustomValidity('Enter a public website such as example.com or https://example.com.'); }
+  if (!form.checkValidity()) { fields.hidden = false; review.hidden = true; form.reportValidity(); return null; }
+  const data = new FormData(form);
+  return `SE LABS request\n\nName: ${data.get('name')}\nWebsite: ${website.value}\nInterest: ${select.selectedOptions[0].text}\nIndustry: ${industry.value || 'Not specified'}\n\nWhat I would like to improve:\n${data.get('goal') || (select.value === 'diagnosis' ? 'Please contact me to discuss my website audit and next steps.' : 'Please contact me to discuss the selected service.')}\n`;
+}
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  const body = brief(); if (!body) return;
+  preview.textContent = body; fields.hidden = true; review.hidden = false; review.focus();
+  status.textContent = 'Ready for review. Your request has not been sent.';
+});
+document.querySelector('#edit-brief')!.addEventListener('click', () => { review.hidden = true; fields.hidden = false; form.querySelector<HTMLInputElement>('#name')!.focus(); status.textContent = ''; });
+document.querySelector('#open-email')!.addEventListener('click', () => {
+  const body = brief(); if (!body) return;
+  const link = document.createElement('a');
+  link.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(select.value === 'diagnosis' ? 'SE LABS — Discuss my AI audit' : 'SE LABS — Business enquiry')}&body=${encodeURIComponent(body)}`;
+  link.click();
+  status.textContent = 'Email draft requested. Nothing has been sent by this website. Review and send it in your email app. If no draft opens, copy or download your request below.';
+});
+document.querySelector('#copy-brief')!.addEventListener('click', async () => {
+  const body = brief(); if (!body) return;
+  try { await navigator.clipboard.writeText(body); status.textContent = `Request copied. Nothing has been sent. Paste it into an email to ${form.dataset.email}.`; }
+  catch { status.textContent = 'Copy is unavailable. Select the request text above or download it, then send it by email.'; }
+});
+document.querySelector('#download-brief')!.addEventListener('click', () => {
+  const body = brief(); if (!body) return;
+  const url = URL.createObjectURL(new Blob([body], { type: 'text/plain;charset=utf-8' }));
+  const link = document.createElement('a'); link.href = url; link.download = 'se-labs-request.txt'; link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  status.textContent = `Request prepared for download. Nothing has been sent. Email the file to ${form.dataset.email}.`;
+});
+</script>

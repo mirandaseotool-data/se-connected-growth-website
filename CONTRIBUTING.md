@@ -1,24 +1,9 @@
 # Contributing
 
-Thanks for helping improve this website.
+Create a feature branch and open a pull request. Do not push changes directly to main.
 
-## How to Contribute
+The current app is Astro with a Node automatic-audit endpoint. Use Node 24, npm ci and npm run dev for local development. Run ASTRO_TELEMETRY_DISABLED=1 npm run build:release, RELEASE=true npm test and npm run test:api before review.
 
-1. Fork the repository.
-2. Create a branch with a clear name, such as `update-copy` or `fix-mobile-layout`.
-3. Make your edits.
-4. Test the page by opening `index.html` in a browser.
-5. Open a pull request and describe the change.
+Check desktop/mobile layout and keyboard interaction. Include screenshots for visual changes where useful. Keep commits focused and preserve accessible controls. Never commit secrets, .env files, dependencies, generated builds or unrelated client material. The supplied logo artwork must be preserved; use SELABS for new document branding.
 
-## Good Pull Requests
-
-- Keep changes focused.
-- Explain why the change helps.
-- Include screenshots for visual updates when possible.
-- Check the layout on both desktop and mobile widths.
-
-## Project Style
-
-- Keep the site dependency-free unless there is a strong reason to add tooling.
-- Preserve accessibility attributes when changing navigation or form elements.
-- Avoid committing generated files, local editor settings, or personal notes.
+The legacy root HTML/CSS/JS files remain for reference; edit src/ for the current application. The backend is required for automatic audits. Review hosting configuration before merging because external deploy hooks may run.
